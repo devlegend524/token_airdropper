@@ -1,37 +1,43 @@
-import React from "react";
-import { getDefaultWallets, RainbowKitProvider } from "@rainbow-me/rainbowkit";
-import "@rainbow-me/rainbowkit/styles.css";
+import React from 'react';
+import { getDefaultWallets, RainbowKitProvider } from '@rainbow-me/rainbowkit';
+import '@rainbow-me/rainbowkit/styles.css';
 
-import { configureChains, createClient, WagmiConfig } from "wagmi";
-import { MyComponent } from "./MyComponent";
-import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
-import { bscTestnet } from "./chains";
-
+import {
+  configureChains,
+  createClient,
+  goerli,
+  mainnet,
+  WagmiConfig,
+} from 'wagmi';
+import { alchemyProvider } from 'wagmi/providers/alchemy';
+import { publicProvider } from 'wagmi/providers/public';
+import { ALCHEMY_ID } from 'config';
+import { RouterProvider } from 'react-router-dom';
+import PageRouter from 'router';
+import Layout from 'layout';
 const { provider, chains } = configureChains(
-  [bscTestnet],
-  [
-    jsonRpcProvider({
-      rpc: chain => ({ http: chain.rpcUrls.default.http[0] }),
-    }),
-  ]
+  [mainnet, goerli],
+  [alchemyProvider({ apiKey: ALCHEMY_ID }), publicProvider()]
 );
 
 const { connectors } = getDefaultWallets({
-  appName: "My RainbowKit App",
-  chains
+  appName: 'Token AirDropper',
+  chains,
 });
 
 const wagmiClient = createClient({
   autoConnect: true,
   connectors,
-  provider
+  provider,
 });
 
 export default function App() {
   return (
     <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-        <MyComponent />
+        <Layout>
+          <RouterProvider router={PageRouter} />
+        </Layout>
       </RainbowKitProvider>
     </WagmiConfig>
   );
