@@ -1,8 +1,7 @@
-# Rainbow-kit-React
-Rainbow-kit implementation with **React** and **custom chain**
+# Token AirDropper
+
+Erc20 Token Airdrop platform
 
 Install : $ npm i --legacy-peer-deps
 
-
 ![rainbow-kit](./rainbow-kit.svg)
-
