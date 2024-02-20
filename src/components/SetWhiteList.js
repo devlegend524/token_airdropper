@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import AipDropperABI from 'config/abis/airdropper.json';
 import { AirDropperAddress, BaseFee, TokenAddress } from 'config';
 import { parseEther } from 'ethers/lib/utils.js';
@@ -8,6 +8,8 @@ import { ethers } from 'ethers';
 export default function SetWhiteList() {
   const { address } = useAccount();
   const [addresses, setAddresses] = useState([]);
+  const { chain } = useNetwork();
+
   const handleChange = (e) => {
     const currentAddresses = e.target.value;
     setAddresses(currentAddresses);
@@ -41,13 +43,13 @@ export default function SetWhiteList() {
     const signer = provider.getSigner();
 
     const airdropContract = new ethers.Contract(
-      AirDropperAddress,
+      AirDropperAddress[chain && chain.id ? chain.id : 1],
       AipDropperABI,
       signer
     );
 
     const tx = await airdropContract.addUsersForAirdrop(
-      TokenAddress,
+      TokenAddress[chain && chain.id ? chain.id : 1],
       addressArr,
       amountArr,
       {

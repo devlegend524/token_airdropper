@@ -1,14 +1,16 @@
 import React from 'react';
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useContractWrite, usePrepareContractWrite, useNetwork } from 'wagmi';
 import AipDropperABI from 'config/abis/airdropper.json';
 
 import { AirDropperAddress, TokenAddress } from 'config';
 
 export default function WithDrawToken() {
+  const { chain } = useNetwork();
+
   const { config } = usePrepareContractWrite({
-    address: AirDropperAddress,
+    address: AirDropperAddress[chain && chain.id ? chain.id : 1],
     abi: AipDropperABI,
-    args: [TokenAddress],
+    args: [TokenAddress[chain && chain.id ? chain.id : 1]],
     functionName: 'withdrawExtraToken',
   });
   const { data, isLoading, isSuccess, write } = useContractWrite(config);

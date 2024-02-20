@@ -1,16 +1,17 @@
 import React from 'react';
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useContractWrite, usePrepareContractWrite, useNetwork } from 'wagmi';
 import { erc20ABI } from 'wagmi';
 
 import { AirDropperAddress, TokenAddress } from 'config';
 import { fromReadableAmount } from 'utils/customHelpers';
 
 export default function ApproveToken() {
+  const { chain } = useNetwork();
   const { config } = usePrepareContractWrite({
-    address: TokenAddress,
+    address: TokenAddress[chain && chain.id ? chain.id : 1],
     abi: erc20ABI,
     args: [
-      AirDropperAddress,
+      AirDropperAddress[chain && chain.id ? chain.id : 1],
       fromReadableAmount('100000000000000000000000000000000000000000000'),
     ],
     functionName: 'approve',

@@ -4,24 +4,27 @@ import {
   useContractRead,
   useContractWrite,
   usePrepareContractWrite,
+  useNetwork,
 } from 'wagmi';
 import AipDropperABI from 'config/abis/airdropper.json';
 
 import { AirDropperAddress, TokenAddress } from 'config';
 import { formatEther } from 'ethers/lib/utils.js';
+
 export default function ClaimButton() {
   const { address } = useAccount();
+  const { chain } = useNetwork();
 
   const result = useContractRead({
     abi: AipDropperABI,
-    address: AirDropperAddress,
-    args: [TokenAddress, address],
+    address: AirDropperAddress[chain && chain.id ? chain.id : 1],
+    args: [TokenAddress[chain && chain.id ? chain.id : 1], address],
     functionName: 'amountToClaim',
   });
   const { config } = usePrepareContractWrite({
-    address: AirDropperAddress,
+    address: AirDropperAddress[chain && chain.id ? chain.id : 1],
     abi: AipDropperABI,
-    args: [TokenAddress],
+    args: [TokenAddress[chain && chain.id ? chain.id : 1]],
     functionName: 'claimAirdrop',
   });
   const { data, isLoading, isSuccess, write } = useContractWrite(config);

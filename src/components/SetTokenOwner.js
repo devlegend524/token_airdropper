@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
-import { useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useContractWrite, usePrepareContractWrite, useNetwork } from 'wagmi';
 import AipDropperABI from 'config/abis/airdropper.json';
 import { AirDropperAddress, TokenAddress } from 'config';
 
 export default function SetTokenOwner() {
   const [addr, setAddr] = useState('');
+
+  const { chain } = useNetwork();
+
   const { config } = usePrepareContractWrite({
-    address: AirDropperAddress,
+    address: AirDropperAddress[chain && chain.id ? chain.id : 1],
     abi: AipDropperABI,
-    args: [TokenAddress, addr],
+    args: [TokenAddress[chain && chain.id ? chain.id : 1], addr],
     functionName: 'setTokenOwner',
   });
 

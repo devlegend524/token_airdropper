@@ -5,29 +5,30 @@ import {
   useContractRead,
 } from 'wagmi';
 import AipDropperABI from 'config/abis/airdropper.json';
-import { erc20ABI, useAccount } from 'wagmi';
+import { erc20ABI, useAccount, useNetwork } from 'wagmi';
 import { AirDropperAddress, TokenAddress } from 'config';
 import ApproveToken from './ApproveToken';
 
 import { formatEther } from 'ethers/lib/utils.js';
 import { parseEther } from 'ethers/lib/utils.js';
+
 export default function DepositToken() {
   const [amount, setAmount] = useState('0');
-
+  const { chain } = useNetwork();
   const { address } = useAccount();
 
   const result = useContractRead({
     abi: erc20ABI,
-    address: TokenAddress,
-    args: [address, AirDropperAddress],
+    address: TokenAddress[chain && chain.id ? chain.id : 1],
+    args: [address, AirDropperAddress[chain && chain.id ? chain.id : 1]],
     functionName: 'allowance',
     account: address,
   });
 
   const { config } = usePrepareContractWrite({
-    address: AirDropperAddress,
+    address: AirDropperAddress[chain && chain.id ? chain.id : 1],
     abi: AipDropperABI,
-    args: [TokenAddress, parseEther(amount)],
+    args: [TokenAddress[chain && chain.id ? chain.id : 1], parseEther(amount)],
     functionName: 'deposit',
   });
 
