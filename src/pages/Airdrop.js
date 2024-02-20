@@ -1,7 +1,6 @@
 import React from 'react';
 import DepositToken from 'components/DepositToken';
 import WithDrawToken from 'components/WithdrawToken';
-import SetTokenOwner from 'components/SetTokenOwner';
 import SetWhiteList from 'components/SetWhiteList';
 
 export default function Airdrop() {
@@ -12,8 +11,6 @@ export default function Airdrop() {
         <br />
         <DepositToken />
         <WithDrawToken />
-        <br />
-        <SetTokenOwner />
         <br />
         <SetWhiteList />
       </div>
