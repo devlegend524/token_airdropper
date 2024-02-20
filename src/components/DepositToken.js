@@ -45,12 +45,9 @@ export default function DepositToken() {
             onChange={(e) => setAmount(e.target.value)}
           />
         </div>
-        {Number(
-          formatEther(result.data) === undefined ? 0 : formatEther(result.data)
-        ) > 0 &&
-        Number(
-          formatEther(result.data) === undefined ? 0 : formatEther(result.data)
-        ) > amount ? (
+        {Number(result.data === undefined ? 0 : formatEther(result.data)) > 0 &&
+        Number(result.data === undefined ? 0 : formatEther(result.data)) >
+          amount ? (
           <div className='flex justify-center flex-col'>
             <button
               className='mx-2 text-white btn_color py-1 px-2 rounded-lg disabled:bg-gray-600'
